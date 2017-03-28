@@ -17,17 +17,46 @@
 
 <div class="container">
     <div class="row">
-        <form action="/news">
-            Cover Picture<br>
-            <input type="text" name="picture" value="Mickey">
-            <br>
-            Last name:<br>
-            <input type="text" name="lastname" value="Mouse">
-            <br><br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
+          <div class="col-md-6">
+                <h2>Create Post</h2>
+                <form action="/news" method="POST">
+                      {{ csrf_field() }}
+<!--                      form group-->
+                      <div class="form-group">
+                            <label for="image">Hero Image</label>
+                            <input name="image" class="form-control" id="image" placeholder="image">
+                      </div>
+<!--                      Topic-->
+                      <div class="form-group">
+                            <label for="topic">Topic:</label>
+                            <input name="topic" class="form-control" type="text" class="form-control" id="topic" placeholder="Topic">
+                      </div>
+<!--                      Body-->
+                      <div class="form-group">
+                            <label for="body">Content</label>
+                            <textarea name="body" class="form-control" id="body" placeholder="Content"></textarea>
+                      </div>
+<!--                      Author-->
+                      <div class="form-group">
+                            <label for="author">Author</label>
+                            <input name="author" class="form-control" id="author" placeholder="Author">
+                      </div>
+<!--                      types-->
+                      <div class="form-group">
+                            <label for="types">Types</label>
+                            <select class="form-control" id="types">
+                                  <option>News</option>
+                                  <option>Variety</option>
+                            </select>
+                      </div>
+                      <div class="form-group">
+                            <label for="position">Position</label>
+                            <textarea name="position" class="form-control" id="position" placeholder="1 or any"></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+          </div>
+     </div>
 </div>
-
 </body>
 </html>
