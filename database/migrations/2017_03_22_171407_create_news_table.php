@@ -19,10 +19,11 @@ class CreateNewsTable extends Migration
             $table->string('topic');
             $table->string('body');
             $table->string('author');
-            $table->enum('types',['news,variety']);
-            $table->integer('position');
+            $table->enum('types',['news','variety']);
+            $table->integer('position')->unsigm;
             $table->timestamps();
         });
+
     }
 
     /**

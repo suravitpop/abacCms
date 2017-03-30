@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\news;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class NewsController extends Controller
 {
@@ -13,7 +18,8 @@ class NewsController extends Controller
      */
     public function index()
     {
-        //
+        $news = news::all();
+        return view('admin.admin')->with('new',$news);
     }
 
     /**
@@ -34,7 +40,7 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $post = new News;
+        $post = new news;
         $post->picture = $request->picture;
         $post->topic = $request->topic;
         $post->body = $request->body;
@@ -42,7 +48,13 @@ class NewsController extends Controller
         $post->types = $request->types;
         $post->position = $request->position;
         $post->save();
+
+        if ($post-> save()){
+            return Redirect::to('news');
+
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -63,7 +75,8 @@ class NewsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $news = news::find($id);
+        return view('admin.view', ['news'=>$news]);
     }
 
     /**
@@ -75,7 +88,30 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $rules = array(
+            'picture' => 'required|string',
+            'topic'   => 'required',
+            'body'    => 'required'
+        );
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->fails()) {
+            return Redirect::to('news/'.$id.'/edit')
+                ->withError($validator)
+                ->withInput(Input::except('password'));
+        } else {
+            //store
+            $post = news::find($id);
+            $post->picture = Input::get('picture');
+            $post->topic = Input::get('topic');
+            $post->body = Input::get('body');
+            $post->author = Input::get('author');
+            $post->position = Input::get('position');
+            $post->save();
+
+            Session::flash('message','Success Update new post, Recheck the content at the link!');
+            return Redirect::to('news');
+        }
     }
 
     /**
@@ -86,6 +122,9 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $del= News::find($id);
+        if ($del->delete()){
+            return Redirect::to('admin.admin');
+        }
     }
 }
